@@ -9,13 +9,12 @@ const Home = () => {
   return (
 
 
-
     <>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full h-auto bg-gradient-to-b from-[#000000] to-[#a79827] "
+        className="w-full md:h-screen bg-gradient-to-b from-[#000000] to-[#a79827] "
       >
         <Navbar />
 
