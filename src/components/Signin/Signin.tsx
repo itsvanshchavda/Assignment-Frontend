@@ -1,6 +1,5 @@
-import signupImage from '../../assets/SignUp.png';
 import eyeImage from '../../assets/Eye.png';
-import { Link, useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 import signinImage from '../../assets/SignIn.png'
 
 const Signin = () => {

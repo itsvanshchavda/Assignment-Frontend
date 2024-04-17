@@ -3,13 +3,33 @@ import eyeImage from '../../assets/Eye.png';
 import eyeSlash from '../../assets/Eye-slash.png'
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useAppDispatch } from '../../store/store';
+import { signUp } from '../../slices/AuthSlice';
+
 
 const Signup = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [reTypePassword, setReTypePassword] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+     
+      const userInfo = { firstName, lastName, password, reTypePassword, email };
+      dispatch(signUp(userInfo)); 
+    } catch (err: unknown) {
+      console.log(err);
+    }
+  }
 
 
-  const [showPassowrd, setShowPaasword] = useState<boolean>(false);
 
- 
 
   return (
     <div className="flex flex-col md:flex-row justify-center items-center py-28 px-5 md:px-20 h-auto w-full">
@@ -18,7 +38,7 @@ const Signup = () => {
       </div>
 
       <div className="bg-white rounded-md ring-1 ring-slate-200 shadow-lg w-full md:w-2/6 h-auto px-5 md:ml-0 md:mt-0 md:pt-0 md:pl-5">
-        <div className="">
+        <div>
           <h1 className="font-extrabold text-2xl md:text-3xl pt-5 md:pt-10 text-dark-purple">
             Let us know{' '}
             <span className="font-extrabold text-fire-red">!</span>
@@ -32,54 +52,43 @@ const Signup = () => {
             </Link>
           </div>
 
-          <form className="mt-5 md:mt-10 font-popins">
+          <form className="mt-5 md:mt-10 font-popins" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-5 md:gap-8 mb-5 md:mb-10">
               <div className="flex flex-col">
                 <label className="text-gray-400">First Name</label>
-                <input type="text" className="bg-transparent outline-none border-b-2 border-gray-300" />
+                <input value={firstName} onChange={(e) => setFirstName(e.target.value)} type="text" className="bg-transparent outline-none border-b-2 border-gray-300" required />
               </div>
 
               <div className="flex flex-col">
                 <label className="text-gray-400">Last Name</label>
-                <input type="text" className="bg-transparent outline-none border-b-2 border-gray-300" />
+                <input value={lastName} onChange={(e) => setLastName(e.target.value)} type="text" className="bg-transparent outline-none border-b-2 border-gray-300" required />
               </div>
 
               <div className="flex flex-col">
                 <label className="text-gray-400">Set Password</label>
                 <div className="relative">
-                  <input type="password" onClick={(e) => e.stopPropagation()}  className="bg-transparent outline-none border-b-2 w-full border-gray-300" />
-                  {showPassowrd ? (<div onClick={(prev) => setShowPaasword(!prev)}>
-                    <img src={eyeSlash} alt="Eye" className="absolute right-0 top-0  -mt-5 mr-2 size-6 md:size-8" />
-
-                  </div>) : (
-                    <div onClick={(prev) => setShowPaasword(!prev)}>
-                      <img src={eyeImage} alt="Eye" className="absolute right-0 top-0  -mt-5 mr-2 size-6 md:size-8" />
-
-                    </div>
-                  )}
+                  <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPassword ? "text" : "password"} onClick={(e) => e.stopPropagation()} className="bg-transparent outline-none border-b-2 w-full border-gray-300" required />
+                  <img src={showPassword ? eyeSlash : eyeImage} alt="Eye" className="absolute right-0 top-0 -mt-5 mr-2 size-6 md:size-8 cursor-pointer" onClick={() => setShowPassword(prev => !prev)} />
                 </div>
               </div>
 
               <div className="flex flex-col">
                 <label className="text-gray-400">Retype Password</label>
                 <div className="relative">
-                  <input type="password" onClick={(e) => e.stopPropagation()} className="bg-transparent outline-none border-b-2 border-gray-300 w-full" />
+                  <input value={reTypePassword} onChange={(e) => setReTypePassword(e.target.value)} type="password" onClick={(e) => e.stopPropagation()} className="bg-transparent outline-none border-b-2 border-gray-300 w-full" required />
 
-                  {showPassowrd ? (<div onClick={() => setShowPaasword(prev => !prev)}>
-                    <img src={eyeSlash} alt="Eye" className="absolute right-0 top-0  -mt-5 mr-2 size-6 md:size-8" />
-
-                  </div>) : (
-                    <div onClick={() => setShowPaasword(prev => !prev)}>
-                      <img src={eyeImage} alt="Eye" className="absolute right-0 top-0  -mt-5 mr-2 size-6 md:size-8" />
-
-                    </div>
-                  )}
                 </div>
               </div>
 
+              {password !== reTypePassword && (
+                <div className='bg-red-400 border px-10 py-1'>
+                  <p className='text-red-600'>Password not matched</p>
+                </div>
+              )}
+
               <div className="flex flex-col">
                 <label className="text-gray-400">Enter Email</label>
-                <input type="email" className="bg-transparent outline-none border-b-2 border-gray-300" />
+                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="bg-transparent outline-none border-b-2 border-gray-300" required />
               </div>
 
               <div className="flex justify-center md:justify-start items-center">
@@ -87,7 +96,6 @@ const Signup = () => {
               </div>
             </div>
           </form>
-
         </div>
       </div>
     </div>
