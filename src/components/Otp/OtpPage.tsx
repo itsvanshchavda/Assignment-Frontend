@@ -27,7 +27,6 @@ const Signin = () => {
     try {
       const otpVal = otp.join('');
       const storedOtp = userInfo?.otp.toString();
-      console.log("🚀 ~ handleSubmit ~ storedOtp:", storedOtp)
 
       if (otpVal !== storedOtp) {
         throw new Error('Invalid OTP');

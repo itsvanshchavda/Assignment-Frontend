@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import signinImage from '../../assets/SignIn.png';
 import { useState } from 'react';
 import { useLoginMutation } from '../../api/auth';
-import { UserInfo, signIn } from '../../slices/AuthSlice';
+import { signIn } from '../../slices/AuthSlice';
 import { useAppDispatch } from '../../store/store';
 import { toast } from 'react-toastify';
-import { loginUser, newUser } from '../../types/types';
+import {loginUser} from '../../types/types';
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -35,7 +35,6 @@ const Signin = () => {
       }
 
       const res = await login(JSON.stringify(newUser)).unwrap();
-      console.log("🚀 ~ handleSubmit ~ res:", res)
       dispatch(signIn(res?.data));
       setProgress(100);
       navigate('/');
