@@ -1,22 +1,23 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface UserInfo {
-    fullName: string
-    password: string | number;
+    fullName: string;
     email: string;
+    otp: number;
+    data: [];
 }
 
 interface UserState {
-    userInfo: UserInfo[];
+    userInfo: UserInfo | null;
     isAuthenticated: boolean;
 }
 
 const storedUserInfo = localStorage.getItem("userInfo");
-const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo) : [];
+const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
 
 const initialState: UserState = {
-    userInfo: Array.isArray(parsedUserInfo) ? parsedUserInfo : [],
-    isAuthenticated: false
+    userInfo: parsedUserInfo,
+    isAuthenticated: !!parsedUserInfo,
 };
 
 export const AuthSlice = createSlice({
@@ -25,24 +26,24 @@ export const AuthSlice = createSlice({
     reducers: {
         signUp: (state, action: PayloadAction<UserInfo>) => {
             state.isAuthenticated = true;
-            state.userInfo.push(action.payload);
-            localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
+            state.userInfo = action.payload;
+            localStorage.setItem("userInfo", JSON.stringify(action.payload));
         },
 
         signIn: (state, action: PayloadAction<UserInfo>) => {
             state.isAuthenticated = true;
-            state.userInfo.push(action.payload);
-            localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
+            state.userInfo = action.payload;
+            localStorage.setItem("userInfo", JSON.stringify(action.payload));
         },
 
         logout: (state) => {
             state.isAuthenticated = false;
-            localStorage.removeItem("userInfo")
-          
+            state.userInfo = null;
+            localStorage.removeItem("userInfo");
         },
     }
 });
 
-export const { signUp, signIn , logout } = AuthSlice.actions;
+export const { signUp, signIn, logout } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

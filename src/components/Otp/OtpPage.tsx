@@ -1,6 +1,9 @@
 
 import otpImage from '../../assets/otp.png'
 import { useState } from 'react';
+import { useAppSelector } from '../../store/store';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 const Signin = () => {
@@ -13,6 +16,33 @@ const Signin = () => {
     newOtp[index] = value;
     setOtp(newOtp);
   };
+
+  const navigate = useNavigate();
+
+  const { userInfo } = useAppSelector((state) => state.auth);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  
+    try {
+      const otpVal = otp.join('');
+      const storedOtp = userInfo?.otp.toString();
+      console.log("🚀 ~ handleSubmit ~ storedOtp:", storedOtp)
+
+      if (otpVal !== storedOtp) {
+        throw new Error('Invalid OTP');
+      }
+      navigate('/');
+      toast.success('Register Success'); 
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error('An unknown error occurred');
+      }
+    }
+  };
+  
 
 
 
@@ -31,7 +61,7 @@ const Signin = () => {
 
 
 
-          <form className="mt-5 md:mt-10 font-popins">
+          <form className="mt-5 md:mt-10 font-popins" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-5 md:gap-8 mb-5 md:mb-10">
 
               {/* OTP Fields */}

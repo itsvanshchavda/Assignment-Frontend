@@ -13,6 +13,9 @@ export const authApi = createApi({
                 url: '/auth/signup',
                 method: 'POST',
                 body: userData,
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                }),
             }),
         }),
 
@@ -21,9 +24,19 @@ export const authApi = createApi({
                 url: '/auth/signin',
                 method: 'POST',
                 body: userData,
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                }),
+            }),
+        }),
+
+        logoutUser: builder.mutation<UserResponse, void>({
+            query: () => ({
+                url: '/auth/logout',
+                method: 'POST',
             }),
         }),
     }),
 });
 
-export const { useRegisterMutation, useLoginMutation } = authApi;
+export const { useRegisterMutation, useLoginMutation , useLogoutUserMutation } = authApi;

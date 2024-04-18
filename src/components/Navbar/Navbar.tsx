@@ -7,25 +7,29 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { FaRegUser } from "react-icons/fa";
 import { logout } from '../../slices/AuthSlice';
 import { toast } from 'react-toastify';
+import { useLogoutUserMutation } from '../../api/auth';
 
 const Navbar = () => {
     const [nav, setNav] = useState<boolean>(false);
     const { userInfo } = useAppSelector((state) => state.auth);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const [logoutUser] = useLogoutUserMutation();
 
     const handleNav = () => {
         setNav((prev) => !prev);
     };
 
-    const handleLogout = () => {
+    const handleLogout = async() => {
         dispatch(logout())
+        await logoutUser();
         toast.success("Logout Success")
         navigate('/signin');
+       
     };
 
     useEffect(() => {
-        if (userInfo == null || userInfo.length === 0) {
+        if (userInfo === null){
             navigate('/signin');
         }
     }, [userInfo]);
@@ -41,7 +45,7 @@ const Navbar = () => {
                 </div>
                 <ul className="justify-end items-center text-white hidden md:flex px-10  gap-5">
 
-                    {userInfo === null || userInfo?.[0] == null ? (
+                    {userInfo === null || !userInfo ? (
                         <>
                             <li>
                                 <Link to="/signin" className="hover:text-gray-300 border px-5 py-1 rounded-md">Sign In</Link>
@@ -54,7 +58,7 @@ const Navbar = () => {
                         <>
                             <li className='flex justify-center items-center gap-3'>
                                 <FaRegUser />
-                                {userInfo[0]?.fullName}
+                                {userInfo.fullName}
                             </li>
                             <li className='hidden md:block'>
                                 <button onClick={handleLogout} className="hover:text-gray-300 border px-5 py-1 rounded-md">Logout</button>
@@ -70,7 +74,7 @@ const Navbar = () => {
                 <div>
                     <div className='float-end p-5 bg-zinc-900 absolute right-1 top-16 shadow-2xl rounded-md mx-5'>
                         <ul className='flex flex-col gap-5 text-white '>
-                            {userInfo === null || userInfo?.[0] == null ? (
+                            {userInfo === null ? (
                                 <>
                                     <li>
                                         <Link to="/signin" className="hover:text-gray-300 border px-5 py-1 rounded-md">Sign In</Link>
@@ -81,11 +85,9 @@ const Navbar = () => {
                                 </>
                             ) : (
                                 <>
-                                    <li className='flex justify-center  items-center gap-3'>
-                                        <FaRegUser />
-                                        {userInfo[0]?.fullName}
-                                    </li>
-                                    <li className='hidden md:block'>
+                                  
+                            
+                                    <li className=''>
                                         <button onClick={handleLogout} className="hover:text-gray-300 border px-5 py-1 rounded-md">Logout</button>
                                     </li>
                                 </>
@@ -97,7 +99,7 @@ const Navbar = () => {
 
             <h1 className='text-white flex justify-center items-center gap-3 md:hidden font-bold float-end mt-1 relative bottom-[4rem] right-16'>
                 <FaRegUser />
-                {userInfo?.[0]?.fullName}
+                {userInfo?.fullName}
             </h1>
 
         </div>
