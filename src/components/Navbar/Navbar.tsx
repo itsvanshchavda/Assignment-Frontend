@@ -3,16 +3,23 @@ import logo from '../../assets/logo.png';
 import { useState } from 'react';
 import { MdOutlineMenu } from "react-icons/md";
 import { MdOutlineClose } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../store/store';
 
 
 
 const Navbar = () => {
 
-    const user: boolean = false
-    const [nav, setNav] = useState<boolean>(false)
 
+    const [nav, setNav] = useState<boolean>(false)
+    const {userInfo} = useAppSelector((state) => state.auth);   
+    const navigate = useNavigate();
     const handleNav = () => {
         setNav((prev) => !prev)
+    }
+
+    if(!userInfo || userInfo.length === 0){  
+        navigate('/signin');
     }
 
 
@@ -32,11 +39,11 @@ const Navbar = () => {
                 <ul className="justify-end items-center text-white hidden md:flex px-10  gap-5">
 
 
-                    {user ? (
+                    {userInfo ? (
 
                         <>
                             <li>
-                                Vansh Chavda
+                                {userInfo[0]?.firstname} {userInfo[0]?.lastname}
                             </li>
 
                             <span className='text-slate-700'>|</span>
@@ -63,11 +70,11 @@ const Navbar = () => {
             {nav && (
                 <div className='float-end p-5 bg-zinc-900 absolute right-1 top-16 shadow-2xl rounded-md mx-5'>
                     <ul className='flex flex-col gap-5 text-white '>
-                        {user ? (
+                        {userInfo ? (
 
                             <>
                                 <li>
-                                    Vansh Chavda
+                                    {userInfo[0]?.firstname} {userInfo[0]?.lastname}
                                 </li>
 
                                 <span className='text-slate-700'>|</span>

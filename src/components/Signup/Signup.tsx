@@ -1,11 +1,11 @@
 import signupImage from '../../assets/SignUp.png';
 import eyeImage from '../../assets/Eye.png';
-import eyeSlash from '../../assets/Eye-slash.png'
-import { Link } from 'react-router-dom';
+import eyeSlash from '../../assets/Eye-slash.png';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAppDispatch } from '../../store/store';
 import { signUp } from '../../slices/AuthSlice';
-
+import { useRegisterMutation } from '../../api/auth';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -14,25 +14,59 @@ const Signup = () => {
   const [password, setPassword] = useState<string>('');
   const [reTypePassword, setReTypePassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const dispatch = useAppDispatch();
+  const [progress, setProgress] = useState<number>(0);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const username = "Rajesh Kumar";
+
+  const [register] = useRegisterMutation();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setProgress(50);
     e.preventDefault();
 
     try {
-     
-      const userInfo = { firstName, lastName, password, reTypePassword, email };
-      dispatch(signUp(userInfo)); 
-    } catch (err: unknown) {
-      console.log(err);
-    }
-  }
+      if (password !== reTypePassword) {
+        throw new Error("Password does not match");
+      }
 
+      const userInfo = {
+        firstname: firstName,
+        lastname: lastName,
+        password,
+        email,
+        username
+      };
+      const res = await register(userInfo).unwrap();
+      dispatch(signUp(res?.user));
+      setProgress(100);
+      navigate('/signin');
+    } catch (err: unknown) {
+      console.error(err);
+      setProgress(0);
+    }
+  };
 
 
 
   return (
     <div className="flex flex-col md:flex-row justify-center items-center py-28 px-5 md:px-20 h-auto w-full">
+      {progress > 0 && (
+        <div>
+          <span id="ProgressLabel" className="sr-only">Loading</span>
+          <span
+            role="progressbar"
+            aria-labelledby="ProgressLabel"
+            aria-valuenow={progress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            className="block rounded-full bg-gray-200 w-64"
+          >
+            <span className="block h-3 rounded-full bg-indigo-600" style={{ width: `${progress}%` }}></span>
+          </span>
+        </div>
+      )}
       <div className="hidden md:block md:w-2/5 pr-0 md:pr-10 md:ml-10">
         <img src={signupImage} alt="Sign Up" className="w-full" />
       </div>
@@ -56,7 +90,7 @@ const Signup = () => {
             <div className="flex flex-col gap-5 md:gap-8 mb-5 md:mb-10">
               <div className="flex flex-col">
                 <label className="text-gray-400">First Name</label>
-                <input value={firstName} onChange={(e) => setFirstName(e.target.value)} type="text" className="bg-transparent outline-none border-b-2 border-gray-300" required />
+                <input value={firstName} onChange={(e) => setFirstName(e.target.value)} type="text" className="bg-transparent outline-none border-b-2 border-gray-300 " required />
               </div>
 
               <div className="flex flex-col">
@@ -68,7 +102,7 @@ const Signup = () => {
                 <label className="text-gray-400">Set Password</label>
                 <div className="relative">
                   <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPassword ? "text" : "password"} onClick={(e) => e.stopPropagation()} className="bg-transparent outline-none border-b-2 w-full border-gray-300" required />
-                  <img src={showPassword ? eyeSlash : eyeImage} alt="Eye" className="absolute right-0 top-0 -mt-5 mr-2 size-6 md:size-8 cursor-pointer" onClick={() => setShowPassword(prev => !prev)} />
+                  <img src={showPassword ? eyeImage : eyeSlash} alt="Eye" className="absolute right-0 top-0 -mt-5 mr-2 size-6 md:size-8 cursor-pointer" onClick={() => setShowPassword(prev => !prev)} />
                 </div>
               </div>
 
@@ -76,7 +110,6 @@ const Signup = () => {
                 <label className="text-gray-400">Retype Password</label>
                 <div className="relative">
                   <input value={reTypePassword} onChange={(e) => setReTypePassword(e.target.value)} type="password" onClick={(e) => e.stopPropagation()} className="bg-transparent outline-none border-b-2 border-gray-300 w-full" required />
-
                 </div>
               </div>
 

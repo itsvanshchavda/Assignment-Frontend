@@ -6,6 +6,7 @@ const Home = () => {
   const handleRedirect = () => {
     window.location.href = "https://highwaydelite.com/"
   }
+
   return (
 
 
@@ -47,7 +48,10 @@ const Home = () => {
             <p className="text-yellow-300 text-center">25000+</p>
             <p className="text-white font-bold text-center">Customer Touch points</p>
           </div>
-        </div>
+        </div>  
+
+
+        {}
 
 
 

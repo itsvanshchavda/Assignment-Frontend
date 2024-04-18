@@ -1,15 +1,14 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface UserInfo {
-    firstName: string;
-    lastName: string;
-    password: string;
-    retypePassword:string;
+    firstname: string;
+    lastname: string;
+    password: string | number;
     email: string;
 }
 
 interface UserState {
-    userInfo: UserInfo[]; // Should be an array of UserInfo
+    userInfo: UserInfo[]; 
     isAuthenticated: boolean;
 }
 
@@ -17,7 +16,7 @@ const storedUserInfo = localStorage.getItem("userInfo");
 const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo) : [];
 
 const initialState: UserState = {
-    userInfo: Array.isArray(parsedUserInfo) ? parsedUserInfo : [], // Ensure userInfo is always an array
+    userInfo: Array.isArray(parsedUserInfo) ? parsedUserInfo : [], 
     isAuthenticated: false
 };
 
