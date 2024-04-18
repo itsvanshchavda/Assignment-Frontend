@@ -8,10 +8,11 @@ This repository contains the frontend code for the assignment. It provides front
 
 ## Technologies Used
 
-- **React Js** ⚛️
-- **Redux Toolkit** 🧰
-- **RTK Query** 🔄
-- **Tailwind CSS** 🎨
+- **React Js** 
+- **Redux Toolkit** 
+- **RTK Query** 
+- **Tailwind CSS** 
+- **React Router Dom**
 
 
 ## Features
@@ -85,6 +86,14 @@ This repository contains the frontend code for the assignment. It provides front
   - User can see the error message if the email is wrong.
 
   - User can see the error message if the email already exists.
+
+
+ ## Routes 
+
+ - /signup
+ - /signin
+ - /otp
+ - /home
 
 Contributing
 ------------
