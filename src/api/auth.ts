@@ -14,6 +14,7 @@ export const authApi = createApi({
                 body: userData,
                 headers: new Headers({
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 }),
             }),
         }),
@@ -25,6 +26,7 @@ export const authApi = createApi({
                 body: userData,
                 headers: new Headers({
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 }),
             }),
         }),
@@ -33,6 +35,10 @@ export const authApi = createApi({
             query: () => ({
                 url: '/auth/logout',
                 method: 'POST',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }),
             }),
         }),
     }),
