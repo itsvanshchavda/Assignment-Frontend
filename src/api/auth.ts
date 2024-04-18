@@ -14,7 +14,7 @@ export const authApi = createApi({
                 body: userData,
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+                    'Accept': '*/*',
                 }),
             }),
         }),
@@ -26,7 +26,7 @@ export const authApi = createApi({
                 body: userData,
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+                    'Accept': '*/*',
                 }),
             }),
         }),
@@ -37,7 +37,7 @@ export const authApi = createApi({
                 method: 'POST',
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+                    'Accept': '*/*',
                 }),
             }),
         }),
