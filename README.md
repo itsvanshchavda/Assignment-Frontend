@@ -58,7 +58,7 @@ This repository contains the frontend code for the assignment. It provides front
 3. Create a `.env` file in the root directory and add the following configuration:
 
    ```bash
-   VITE_API_URL="http://localhost:3000/api"
+   VITE_API_URL="http://localhost:3000/auth"
    ```
 
 4. Run the server: `npm start dev`
