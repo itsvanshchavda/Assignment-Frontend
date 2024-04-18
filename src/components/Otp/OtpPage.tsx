@@ -90,7 +90,6 @@ const Signin = () => {
 
 
               <div className="flex flex-col justify-center md:justify-start items-center gap-5">
-                <p>Not recieved ? <span className='text-fire-red underline cursor-pointer'>Resend</span> </p>
                 <button type='submit' className="px-8 md:px-28 py-2 bg-dark-purple rounded-md text-white">Verify</button>
               </div>
             </div>
