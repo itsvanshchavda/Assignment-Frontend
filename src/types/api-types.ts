@@ -1,5 +1,5 @@
 
-import {User , Product} from './types'
+import {User} from './types'
 
 
 export type UserResponse = {
@@ -7,6 +7,3 @@ export type UserResponse = {
     token: string;
 }
 
-export type ProductResponse = {
-    products: Product[];
-}

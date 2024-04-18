@@ -1,12 +1,68 @@
 import eyeImage from '../../assets/Eye.png';
-import {useNavigate } from 'react-router-dom';
+import eyeSlash from '../../assets/Eye-slash.png'
+import { useNavigate } from 'react-router-dom';
 import signinImage from '../../assets/SignIn.png'
+import { useState } from 'react';
+import { useLoginMutation } from '../../api/auth';
+import { signIn } from '../../slices/AuthSlice';
+import { useAppDispatch } from '../../store/store';
+import { toast } from 'react-toastify';
 
 const Signin = () => {
 
   const navigate = useNavigate();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
+  const [login] = useLoginMutation();
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setProgress(50);
+    e.preventDefault();
+
+    try {
+
+      const userInfo = {
+        password,
+        email,
+      };
+      const res = await login(userInfo).unwrap();
+      console.log(res)
+      dispatch(signIn(res?.data));
+      setProgress(100);
+      navigate('/');
+      toast.success("Login success")
+    } catch (err) {
+      console.error(err);
+      setProgress(0);
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
+    }
+  };
+
+
   return (
     <div className="flex flex-col md:flex-row justify-center items-center py-32 md:py-28 px-5 md:px-24 h-auto w-full">
+      {progress > 0 && (
+        <div className='relative'>
+          <span id="ProgressLabel" className="sr-only">Loading</span>
+          <span
+            role="progressbar"
+            aria-labelledby="ProgressLabel"
+            aria-valuenow={progress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            className="block rounded-full bg-gray-200 w-64"
+          >
+            <span className="block h-3 rounded-full bg-indigo-600" style={{ width: `${progress}%` }}></span>
+          </span>
+        </div>
+      )}
       <div className="hidden md:block md:w-2/5 pr-0 md:pr-10 md:ml-10">
         <img src={signinImage} alt="Sign Up" className="w-full" />
       </div>
@@ -20,19 +76,19 @@ const Signin = () => {
 
 
 
-          <form className="mt-5 md:mt-10 font-popins">
+          <form className="mt-5 md:mt-10 font-popins" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-5 md:gap-8 mb-5 md:mb-10">
 
               <div className="flex flex-col">
                 <label className="text-gray-400">Enter Email</label>
-                <input type="text" className="bg-transparent outline-none border-b-2 border-gray-300" />
+                <input value={email} onChange={(e) => setEmail(e.target.value)} type="text" className="bg-transparent outline-none border-b-2 border-gray-300" />
               </div>
 
               <div className="flex flex-col">
-                <label className="text-gray-400">Password</label>
+                <label className="text-gray-400">Set Password</label>
                 <div className="relative">
-                  <input type="text" className="bg-transparent outline-none border-b-2 w-full border-gray-300" />
-                  <img src={eyeImage} alt="Eye" className="absolute right-0 top-0  -mt-5 mr-2 size-6 md:size-8" />
+                  <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPassword ? "text" : "password"} onClick={(e) => e.stopPropagation()} className="bg-transparent outline-none border-b-2 w-full border-gray-300" required />
+                  <img src={showPassword ? eyeImage : eyeSlash} alt="Eye" className="absolute right-0 top-0 -mt-5 mr-2 size-6 md:size-8 cursor-pointer" onClick={() => setShowPassword(prev => !prev)} />
                 </div>
               </div>
 

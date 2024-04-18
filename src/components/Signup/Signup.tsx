@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { useAppDispatch } from '../../store/store';
 import { signUp } from '../../slices/AuthSlice';
 import { useRegisterMutation } from '../../api/auth';
+import { toast } from 'react-toastify';
+import { AiOutlineWarning } from 'react-icons/ai';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -15,11 +17,8 @@ const Signup = () => {
   const [reTypePassword, setReTypePassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [progress, setProgress] = useState<number>(0);
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const username = "Rajesh Kumar";
-
   const [register] = useRegisterMutation();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,28 +31,29 @@ const Signup = () => {
       }
 
       const userInfo = {
-        firstname: firstName,
-        lastname: lastName,
+        fullName: firstName + lastName,
         password,
         email,
-        username
       };
       const res = await register(userInfo).unwrap();
       dispatch(signUp(res?.user));
       setProgress(100);
-      navigate('/signin');
-    } catch (err: unknown) {
+      navigate('/otp');
+    } catch (err) {
       console.error(err);
       setProgress(0);
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
     }
   };
-
-
 
   return (
     <div className="flex flex-col md:flex-row justify-center items-center py-28 px-5 md:px-20 h-auto w-full">
       {progress > 0 && (
-        <div>
+        <div className='relative'>
           <span id="ProgressLabel" className="sr-only">Loading</span>
           <span
             role="progressbar"
@@ -114,8 +114,13 @@ const Signup = () => {
               </div>
 
               {password !== reTypePassword && (
-                <div className='bg-red-400 border px-10 py-1'>
-                  <p className='text-red-600'>Password not matched</p>
+                <div className='flex items-center bg-red-400 border px-4 py-3 rounded-md'>
+                  <div className='text-red-200'>
+                    <AiOutlineWarning />
+                  </div>
+                  <div className='ml-3 text-red-200'>
+                    <p>Passwords do not match</p>
+                  </div>
                 </div>
               )}
 
@@ -124,9 +129,10 @@ const Signup = () => {
                 <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="bg-transparent outline-none border-b-2 border-gray-300" required />
               </div>
 
-              <div className="flex justify-center md:justify-start items-center">
-                <button type='submit' className="px-8 md:px-10 py-2 bg-dark-purple rounded-md text-white">Sign Up</button>
+              <div className="flex justify-start md:justify-center items-center">
+                <button type='submit' className="px-8 md:px-20 py-2 bg-dark-purple rounded-md text-white">Sign Up</button>
               </div>
+
             </div>
           </form>
         </div>
