@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import signinImage from '../../assets/SignIn.png';
 import { useState } from 'react';
 import { useLoginMutation } from '../../api/auth';
-import { signIn } from '../../slices/AuthSlice';
+import { UserInfo, signIn } from '../../slices/AuthSlice';
 import { useAppDispatch } from '../../store/store';
 import { toast } from 'react-toastify';
-import {loginUser} from '../../types/types';
+import {  loginUser } from '../../types/types';
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -28,14 +28,14 @@ const Signin = () => {
         email,
       };
 
-
       if (!validatePassword(password)) {
         toast.error("Your password must be at least 8 characters long, contain at least one number, and have a mixture of uppercase and lowercase letters.");
         return;
       }
 
+
       const res = await login(JSON.stringify(newUser)).unwrap();
-      dispatch(signIn(res?.data));
+      dispatch(signIn(res?.data as unknown as UserInfo));
       setProgress(100);
       navigate('/');
       toast.success("Login success");
@@ -77,7 +77,6 @@ const Signin = () => {
       )}
 
       <div className="flex flex-col md:flex-row justify-center items-center py-32 md:py-28 px-5 md:px-24 h-auto w-full">
-
         <div className="hidden md:block md:w-2/5 pr-0 md:pr-10 md:ml-10">
           <img src={signinImage} alt="Sign Up" className="w-full" />
         </div>

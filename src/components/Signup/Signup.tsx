@@ -4,7 +4,7 @@ import eyeSlash from '../../assets/Eye-slash.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAppDispatch } from '../../store/store';
-import { signUp } from '../../slices/AuthSlice';
+import { UserInfo, signUp } from '../../slices/AuthSlice';
 import { useRegisterMutation } from '../../api/auth';
 import { toast } from 'react-toastify';
 import { AiOutlineWarning } from 'react-icons/ai';
@@ -59,7 +59,7 @@ const Signup = () => {
       
 
       const res = await register(JSON.stringify(newUser)).unwrap();
-      dispatch(signUp(res?.user ));
+      dispatch(signUp(res?.data[0] as unknown as UserInfo));
       setProgress(100);
       navigate('/otp');
     } catch (err) {

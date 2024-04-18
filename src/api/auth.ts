@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { UserResponse } from "../types/api-types";
 
-// Define endpoints
 const baseUrl = import.meta.env.VITE_API_URL;
 
 export const authApi = createApi({

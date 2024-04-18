@@ -1,14 +1,20 @@
-
-
 export type User = {
-
-    id: string;
+    _id: string;
     fullName: string;
     email: string;
-    password: string | number;
-    otp: string | number;
-    data: [User]
+    password: string;
+    resetPasswordToken: string | null;
+    resetPasswordExpires: string | null;
+    otp: number;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}
 
+export type UserResponse = {
+    user: User;
+    token: string;
+    data: User;
 }
 
 export type newUser = {
@@ -17,8 +23,7 @@ export type newUser = {
     password: string | number;
 }
 
-
 export type loginUser = {
-    email: string;  
+    email: string;
     password: string | number;
 }
