@@ -59,7 +59,7 @@ const Signup = () => {
       
 
       const res = await register(JSON.stringify(newUser)).unwrap();
-      dispatch(signUp(res?.data[0] as unknown as UserInfo));
+      dispatch(signUp(res.user as unknown as UserInfo));
       setProgress(100);
       navigate('/otp');
     } catch (err) {
