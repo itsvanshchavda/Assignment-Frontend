@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { UserResponse } from "../types/api-types";
+import { UserResponse } from "../types/types";
+
+
 
 const baseUrl = import.meta.env.VITE_API_URL;
 
@@ -14,7 +16,6 @@ export const authApi = createApi({
                 body: userData,
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'Accept': '*/*',
                 }),
             }),
         }),
@@ -26,7 +27,6 @@ export const authApi = createApi({
                 body: userData,
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'Accept': '*/*',
                 }),
             }),
         }),
@@ -37,7 +37,6 @@ export const authApi = createApi({
                 method: 'POST',
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'Accept': '*/*',
                 }),
             }),
         }),
